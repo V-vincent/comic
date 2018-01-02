@@ -1,0 +1,44 @@
+{include file='header'}
+	<link rel="stylesheet" type="text/css" href="__STATIC__/admin/library/dropify-master/dist/css/dropify.min.css">
+	<div class="container">
+		<h2>编辑漫画表单界面</h2>
+		<form action="{:url('update')}" class="form" method="post" enctype="multipart/form-data">
+			<div class="form-group">
+				<label >漫画名称</label> 
+				<input type="text" class="form-control" name="comic_name" value="{$info.comic_name}">
+			</div>
+			<div class="form-group">
+				<label >漫画类型</label>
+				<select name="cate_id">
+					<option value="">请选择</option>
+					{foreach $list as $cate_info}
+					<option value="{$cate_info.id}" {if $info.cate_id == $cate_info.id}selected=""{/if}>{$cate_info.cate_name}</option>
+					{/foreach}
+				</select>			
+			</div>			
+			<div class="form-group">
+				<label >漫画缩略图</label>
+				<input type="file" name="comic_thumb" class="dropify" data-default-file="__UPLOADS__{$info.comic_thumb}">
+			</div>			
+			<div class="form-group">
+				<label >漫画内容</label>
+				<textarea name="comic_content" id="myEditor" style="height: 280px;">{$info.comic_content}</textarea>
+			</div>
+			<div class="form-group">
+				<input type="hidden" name="id" value="{$info.id}">
+				<input type="submit" class="btn btn-primary" value="更新">
+			</div>
+		</form>
+	</div>
+
+	<script type="text/javascript" src="__STATIC__/admin/library/dropify-master/dist/js/dropify.min.js"></script>
+	 <!-- 配置文件 -->
+    <script type="text/javascript" src="__STATIC__/admin/library/ueditor/ueditor.config.js"></script>
+    <!-- 编辑器源码文件 -->
+    <script type="text/javascript" src="__STATIC__/admin/library/ueditor/ueditor.all.min.js"></script>
+	<script type="text/javascript">
+		$('.dropify').dropify()
+    	UE.getEditor("myEditor")
+    </script>    
+</body>
+</html>

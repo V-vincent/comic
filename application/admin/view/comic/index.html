@@ -1,0 +1,94 @@
+{include file='header'}
+	<style>
+	.navbar .cur{olor: #ff5500;}
+	.navbar>span:hover{
+		color: #ff5500!important;
+		cursor: pointer;
+	}
+	</style>
+	<div class="container" id="container">
+		<div>
+			<a href="{:url('add')}" class="btn btn-primary">添加漫画</a>
+		</div>
+		<div class="pull-right">
+			<form action="{:url('index')}" class="form">
+				<div class="row">
+					<div class="col-md-5">
+						漫画名称
+						<input type="text" name="comic_name"></div>
+					<div class="col-md-3">
+						漫画分类
+						<select name="cate_id" onchange="$('#search_btn').click()">
+							<option value="">请选择</option>
+							{foreach $cate_list as $info}
+							<option value="{$info.id}">{$info.cate_name}</option>
+							{/foreach}						
+						</select>
+					</div>
+					<div class="col-md-4">
+						<input type="submit" class="btn btn-info" id="search_btn" value="搜索">
+						<a href="{:url('index')}">清除搜索</a>
+					</div>
+				</div>
+			</form>
+		</div>
+		<h2>漫画列表</h2>			
+		<table class="table table-hover">
+			<tr>
+				<th>ID</th>
+				<th>漫画名称</th>
+				<th>缩略图</th>
+				<th>漫画类型</th>
+				<th>操作</th>
+			</tr>
+			<tr v-for="info in comic_list">
+				<td>{{info.id}}</td>
+				<td  @dblclick="dblEdit(info)">
+					<input type="text" v-if="info.dblStatus==true" :value="info.comic_name" name="comic_name" v-model="info.comic_name" @keyup.enter="enter(info)">
+					<span  v-if="info.dblStatus!=true" name="comic_name">{{info.comic_name}}</span>
+				</td>		
+				<td >
+				</td>
+				<td>{{info.cate_name}}</td>
+				<td>
+					<a @click="checkInfo(info.id)" class="btn btn-info" target="_blank">查看</a>
+					<a @click="editInfo(info.id)" class="btn btn-info">编辑</a>
+					<a @click="deleteInfo(info.id)" class="btn btn-danger">删除</a>
+				</td>				
+			</tr>
+			
+		</table>
+	<div>
+		
+	</div>		
+	</div>
+<script>
+	new Vue({
+		el:"#container",
+		data:{
+			comic_list:JSON.parse('{$list}')
+		},
+		methods:{
+			dblEdit:function (info) {
+				info.dblStatus = true;
+			},
+			enter(info){
+				info.dblStatus = false;
+				location.href="{:url('update2')}?id="+info.id+"&&comic_name="+info.comic_name;
+			},
+			deleteInfo:function(id){
+				if (confirm('你确认要删除吗？')) {
+					location.href="{:url('delete')}?id="+id;
+				}
+			},
+			editInfo(id){
+				location.href="{:url('edit')}?id="+id;
+			},
+			checkInfo(id){
+				location.href="{:url('index/comic/info')}?id="+id;
+			}
+		}
+	})
+</script>
+</body>
+</html>
